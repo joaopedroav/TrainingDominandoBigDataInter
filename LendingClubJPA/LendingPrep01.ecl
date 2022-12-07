@@ -1,33 +1,39 @@
 IMPORT $;
 
-Lending := $.File_Lending.File;
-LendingRelevant := $.File_Lending.LendingRelevant;
+Lendings := $.File_Optimized.Dataset_optimized;
+ML_Prop := $.File_Optimized.Lending_Relevant;
 
 EXPORT LendingPrep01 := MODULE
+
+  ML_Prop_Ext := RECORD (ML_Prop)
+  UNSIGNED4 random_index;
   
-  MLPropExt := RECORD(LendingRelevant)
-    UNSIGNED4 rnd; // A random number
-  END;
+END;
 
-  // Clean the data and assign a random number to each record
-  CleanFilter := Lending.emp_length <> '' AND Lending.emp_length = '10+ years' AND 
-  Lending.mths_since_last_delinq > '24' AND Lending.acc_now_delinq <> '1';
+CleanFilter := Lendings.acc_now_delinq = 0 AND //doesn't have current debts 
+               Lendings.delinq_2yrs = 0 AND //doesn't have debts in the past 2 years
+               Lendings.emp_length IN [
+                '2 years', 
+                '3 years', 
+                '4 years', 
+                '5 years', 
+                '6 years', 
+                '7 years',
+                '8 years',
+                '9 years',
+                '10 years',
+                '10+ years'
+               ] AND //have a job for over a year
+               Lendings.home_ownership <> 'MORTGAGE' AND //doesn't have to pay mortage
+               Lendings.loan_status = 'Fully Paid'; //doesn't have current lending
 
-//   CleanFilter := Property.zip <> '' AND Property.assessed_value <> 0 AND Property.year_acquired <> 0 AND 
-//                  Property.land_square_footage <> 0 AND Property.living_square_feet <> 0 AND 
-//                  Property.bedrooms <> 0 AND Property.year_Built <> 0;
-							 
-  EXPORT myDataE := PROJECT(Lending(CleanFilter), TRANSFORM(MLPropExt, 
-                                                             SELF.rnd := RANDOM(),
-                                                             SELF.allowed := 'yes',
-                                                             SELF := LEFT));
-																														 
-  // Shuffle your data by sorting on the random field
-  SHARED myDataES := SORT(myDataE, rnd);
-  // Now cut the deck and you have random samples within each set
-  // While you're at it, project back to your original format -- we dont need the rnd field anymore
-  // Treat first 5000 as training data.  Transform back to the original format.
-  EXPORT myTrainData := PROJECT(myDataES[1..5000], LendingRelevant);  
-  // Treat next 2000 as test data
-  EXPORT myTestData  := PROJECT(myDataES[5001..7000], LendingRelevant); 
+EXPORT myDataE := PROJECT (Lendings(CleanFilter), 
+                           TRANSFORM(ML_Prop_Ext, 
+                                     SELF.random_index := RANDOM(), 
+                                     SELF := LEFT));
+
+SHARED myDataEs := SORT(myDataE, random_index);
+EXPORT myTrainData := PROJECT(myDataES[1..500000], ML_Prop);
+EXPORT myTestData  := PROJECT(myDataES[500001..700000], ML_Prop);
+
 END;
