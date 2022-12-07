@@ -146,6 +146,13 @@ EXPORT File_Lending := MODULE
         STRING debt_settlement_flag;
     END;
 
-    EXPORT File := DATASET('~lendingclub::jpav::loan_status.csv', Layout, CSV(HEADING(1)));
+    EXPORT File := DATASET('~tarefa::lendingclub::jpa::loan_status_2007-2020q3.csv', Layout, CSV(HEADING(1)));
+
+    EXPORT LendingRelevant := RECORD
+        STRING emp_length;
+        STRING mths_since_last_delinq;
+        STRING acc_now_delinq;
+        STRING allowed;
+    END;
 
 END;
