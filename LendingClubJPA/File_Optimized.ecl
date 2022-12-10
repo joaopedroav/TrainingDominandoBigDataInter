@@ -155,4 +155,17 @@ EXPORT File_Optimized := MODULE
         STRING51 loan_status;
     END;
 
+    EXPORT MLLending := RECORD 
+        //*****quantitative below:
+        UNSIGNED1 acc_now_delinq;//The number of accounts on which the borrower is now delinquent.
+        UNSIGNED1 acc_open_past_24mths;//Number of trades opened in past 24 months.
+        UNSIGNED2 all_util;//Balance to credit limit on all trades
+        REAL8 annual_inc;//LC assigned loan grade
+        UNSIGNED1 delinq_2yrs;//The number of 30+ days past-due incidences of delinquency in the borrower's credit file for the past 2 years
+        UNSIGNED3 avg_cur_bal;
+        
+        //*****qualitative below
+        UNSIGNED1 y;//going to invest
+    END;
+
 END;
