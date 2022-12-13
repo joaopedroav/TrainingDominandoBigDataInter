@@ -1,8 +1,8 @@
 IMPORT $;
 
-// lending := $.File_Lending.File;
+lending := $.File_Lending.File;
 
-// OUTPUT(lending, NAMED('lending'));
+OUTPUT(lending, NAMED('lending'));
 // COUNT(lending);
 
 // OUTPUT(lending, {emp_length, mths_since_last_delinq, acc_now_delinq}, NAMED('lending_relevant'));

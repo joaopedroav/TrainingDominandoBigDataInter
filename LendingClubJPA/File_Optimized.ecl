@@ -162,7 +162,7 @@ EXPORT File_Optimized := MODULE
         UNSIGNED2 all_util;//Balance to credit limit on all trades
         REAL8 annual_inc;//LC assigned loan grade
         UNSIGNED1 delinq_2yrs;//The number of 30+ days past-due incidences of delinquency in the borrower's credit file for the past 2 years
-        UNSIGNED3 avg_cur_bal;
+        UNSIGNED3 avg_cur_bal;//Average current balance of all accounts
         
         //*****qualitative below
         UNSIGNED1 y;//going to invest

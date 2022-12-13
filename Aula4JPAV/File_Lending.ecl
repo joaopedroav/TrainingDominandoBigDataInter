@@ -147,13 +147,6 @@ EXPORT File_Lending := MODULE
 
     EXPORT File := DATASET('~tarefa::lendingclub::jpa::loan_status_2007-2020q3.csv', Layout, CSV(HEADING(1)));
 
-    EXPORT LendingRelevant := RECORD
-        STRING emp_length;
-        STRING mths_since_last_delinq;
-        STRING acc_now_delinq;
-        STRING allowed;
-    END;
-
     //New record structure for the property attributes that will be clustered
     EXPORT MLLending := RECORD
         REAL acc_now_delinq;//The number of accounts on which the borrower is now delinquent.
